@@ -37,10 +37,9 @@ encoder model is ALPS SRGP 200200
 
 [sch](sch/)
 
-[OSHW](https://oshwhub.com/pkerr/keyborard-juk-32-rev-a)
+[OSHW](https://oshwhub.com/pkerr/keyboard-juk-mx-32-rev-a)
 
-![pcb_top](img/pcb_top.png)
-![pcb_bottom](img/pcb_bottom.png)
+![pcb](img/pcb.jpg)
 
 ### 3D files
 
