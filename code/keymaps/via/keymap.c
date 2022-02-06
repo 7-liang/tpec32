@@ -67,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-bool encoder_update_user(uint8_t index, bool clockwise)
+bool encoder_update_user(bool clockwise)
 {
     if (clockwise) {
         tap_code16(dynamic_keymap_get_keycode(biton32(layer_state), 0, 5));
@@ -75,5 +75,5 @@ bool encoder_update_user(uint8_t index, bool clockwise)
         tap_code16(dynamic_keymap_get_keycode(biton32(layer_state), 0, 6));
     }
 
-    return false;
+    return true;
 }

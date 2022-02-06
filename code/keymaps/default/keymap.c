@@ -67,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-bool encoder_update_user(uint8_t index, bool clockwise)
+bool encoder_update_user(bool clockwise)
 {
     if (IS_LAYER_ON(_BASE))
     {
@@ -87,5 +87,5 @@ bool encoder_update_user(uint8_t index, bool clockwise)
         else tap_code(KC_PGDN);
     }
 
-    return false;
+    return true;
 }

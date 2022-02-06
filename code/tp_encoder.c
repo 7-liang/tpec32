@@ -22,9 +22,10 @@
 
 #include "tp_encoder.h"
 
-__attribute__((weak)) bool encoder_update_user(uint8_t index, bool clockwise) { return true; }
+// only one encoder, move index
+__attribute__((weak)) bool encoder_update_user(bool clockwise) { return true; }
 
-__attribute__((weak)) bool encoder_update_kb(uint8_t index, bool clockwise) { return encoder_update_user(index, clockwise); }
+__attribute__((weak)) bool encoder_update_kb(bool clockwise) { return encoder_update_user(clockwise); }
 
 static pin_t EC_A_Pin       = ENCODER_PAD_A;
 static pin_t EC_B_Pin       = ENCODER_PAD_B;
@@ -42,7 +43,7 @@ void encoder_init(void)
 bool encoder_scan(void)
 {
     bool changed        = false;
-    bool scan_result    = false;
+    int8_t scan_result  = 0;
 
     EC_A_Now            = readPin(EC_A_Pin);
     EC_B_Now            = readPin(EC_B_Pin);
@@ -55,23 +56,23 @@ bool encoder_scan(void)
         // 旋转后，电平为高时
         if (EC_A_Now == 1)
         {
-            if (EC_B_Last && !EC_B_Now) scan_result = true;             // 上次高，本次低，正转
-            else if (!EC_B_Last && EC_B_Now) scan_result = false;       // 上次低，本次高，反转
+            if (EC_B_Last && !EC_B_Now) scan_result = 1;                // 上次高，本次低，正转
+            else if (!EC_B_Last && EC_B_Now) scan_result = -1;          // 上次低，本次高，反转
             else if (EC_B_Now == EC_B_Last)                             // 两次电平相等，转动后接着反转
             {
-                if (!EC_B_Now) scan_result = true;                      // 当前低，正转
-                else scan_result = false;                               // 当前高，反转
+                if (!EC_B_Now) scan_result = 1;                         // 当前低，正转
+                else scan_result = -1;                                  // 当前高，反转
             }
         }
         // 转动后，电平为低时
         else
         {
-            if (EC_B_Last && !EC_B_Now) scan_result = false;            // 上次高，本次低，反转
-            else if (!EC_B_Last && EC_B_Now) scan_result = true;        // 上次低，本次高，正转
+            if (EC_B_Last && !EC_B_Now) scan_result = -1;               // 上次高，本次低，反转
+            else if (!EC_B_Last && EC_B_Now) scan_result = 1;           // 上次低，本次高，正转
             else if (EC_B_Now == EC_B_Last)                             // 转动后接着反转，两次电平相等
             {
-                if (!EC_B_Now) scan_result = false;                     // 当前低，反转
-                else scan_result = true;                                // 当前高，正转
+                if (!EC_B_Now) scan_result = -1;                        // 当前低，反转
+                else scan_result = 1;                                   // 当前高，正转
             }
         }
 
@@ -79,7 +80,14 @@ bool encoder_scan(void)
         EC_A_Last   = EC_A_Now;
         EC_B_Last   = EC_B_Now;
 
-        changed     |= encoder_update_kb(0, scan_result);
+        if (scan_result == 1)
+        {
+            changed = encoder_update_kb(true);
+        }
+        else if (scan_result == -1)
+        {
+            changed = encoder_update_kb(false);
+        }
     }
     
     return changed;

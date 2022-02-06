@@ -35,7 +35,6 @@
 
 #define RGB_DI_PIN          B1
 #define RGBLED_NUM          16
-#define RGBLIGHT_ANIMATIONS
 
 // animations enable
 #define RGBLIGHT_EFFECT_BREATHING
@@ -51,6 +50,7 @@
 
 #define RGBLIGHT_SLEEP
 
+#define LED_PIN_ON_STATE    0
 #define LED_CAPS_LOCK_PIN   F5
 #define LED_NUM_LOCK_PIN    F7
 // 按键灯，按下任意键都会亮一下
@@ -62,8 +62,8 @@
 #define ENCODER_PAD_B   B5
 
 // TrackPoint pin
-#define PS2_CLOCK_PIN   D5
-#define PS2_DATA_PIN    D2
+#define PS2_CLOCK_PIN   D2
+#define PS2_DATA_PIN    D5
 
 #ifdef PS2_USE_USART
 // UART 方式

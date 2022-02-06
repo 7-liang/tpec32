@@ -25,19 +25,7 @@ void matrix_init_kb(void)
 
     matrix_init_user();
 
-    // 键盘连接时，获取 CAPS LOCK LED 和 NUM LOCK LED 的状态，并初始化这两个灯的电平状态
-    // on powerup, caps lock and num lock light diode init
-    led_update_kb(host_keyboard_led_state());
-
     encoder_init();
-}
-
-bool led_update_kb(led_t led_state)
-{
-    writePin(LED_CAPS_LOCK_PIN, !led_state.caps_lock);
-    writePin(LED_NUM_LOCK_PIN, !led_state.num_lock);
-
-    return led_update_user(led_state);
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record)
@@ -50,4 +38,11 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record)
 void matrix_scan_kb(void)
 {
    encoder_scan(); 
+}
+
+bool encoder_update_kb(bool clockwise)
+{
+    if (!encoder_update_user(clockwise)) return false;
+
+    return true;
 }
